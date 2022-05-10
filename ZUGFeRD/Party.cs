@@ -39,6 +39,11 @@ namespace s2industries.ZUGFeRD
       public string Name { get; set; }
 
       /// <summary>
+      /// Party description (XRechnung BT-33 SellerAdditionalLegalInformation: Sonstige rechtliche Informationen des Verkäufers)
+      /// </summary>
+      public string Description { get; set; }
+
+      /// <summary>
       /// Name of the contact at the party
       /// </summary>
       public string ContactName { get; set; }
@@ -62,6 +67,12 @@ namespace s2industries.ZUGFeRD
       /// Street name and number
       /// </summary>
       public string Street { get; set; }
+
+      /// <summary>
+      /// email address
+      /// </summary>        
+      public string EmailAddress { get; set; }
+
       public GlobalID GlobalID { get; set; }
    }
 }

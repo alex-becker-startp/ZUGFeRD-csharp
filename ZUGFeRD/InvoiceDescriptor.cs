@@ -255,7 +255,26 @@ namespace s2industries.ZUGFeRD
         /// — preceding partial invoices are referred to from a final invoice; 
         /// — preceding pre-payment invoices are referred to from a final invoice.
         /// </summary>
-        public InvoiceReferencedDocument InvoiceReferencedDocument { get; set; }
+        public InvoiceReferencedDocument InvoiceReferencedDocument
+        {
+            get => InvoiceReferencedDocuments.FirstOrDefault();
+            set
+            {
+                InvoiceReferencedDocuments.Clear();
+                if (value != null)
+                    InvoiceReferencedDocuments.Add(value);
+            }
+        }
+
+        /// <summary>
+        /// A group of business terms providing information about a preceding invoices.
+        /// 
+        /// To be used in case: 
+        /// — a preceding invoice is corrected; 
+        /// — preceding partial invoices are referred to from a final invoice; 
+        /// — preceding pre-payment invoices are referred to from a final invoice.
+        /// </summary>
+        public List<InvoiceReferencedDocument> InvoiceReferencedDocuments { get; } = new List<InvoiceReferencedDocument>();
 
         /// <summary>
         /// Detailed information about the accounting reference
@@ -612,6 +631,22 @@ namespace s2industries.ZUGFeRD
                 ID = id,
                 IssueDateTime = IssueDateTime
             };
+        }
+
+        /// <summary>
+        /// Set Information about Preceding Invoice
+        /// </summary>
+        /// <param name="id">Preceding InvoiceNo</param>
+        /// <param name="IssueDateTime">Preceding Invoice Date</param>
+        [Obsolete("Funktioniert in CII-XML nicht, da die Kardinalität dort 0..1 ist !!", error: true)]
+        public void AddInvoiceReferencedDocument(string id, DateTime? IssueDateTime = null)
+        {
+            var value = new InvoiceReferencedDocument()
+            {
+                ID = id,
+                IssueDateTime = IssueDateTime
+            };
+            this.InvoiceReferencedDocuments.Add(value);
         }
 
         /// <summary>

@@ -903,18 +903,31 @@ namespace s2industries.ZUGFeRD
             #endregion
 
             #region InvoiceReferencedDocument
-            if (this.Descriptor.InvoiceReferencedDocument != null)
+
+            foreach (var refDoc in this.Descriptor.InvoiceReferencedDocuments)
             {
                 Writer.WriteStartElement("ram:InvoiceReferencedDocument");
-                _writeOptionalElementString(Writer, "ram:IssuerAssignedID", this.Descriptor.InvoiceReferencedDocument.ID);
-                if (this.Descriptor.InvoiceReferencedDocument.IssueDateTime.HasValue)
+                _writeOptionalElementString(Writer, "ram:IssuerAssignedID", refDoc.ID);
+                if (refDoc.IssueDateTime.HasValue)
                 {
                     Writer.WriteStartElement("ram:FormattedIssueDateTime");
-                    _writeElementWithAttribute(Writer, "qdt:DateTimeString", "format", "102", _formatDate(this.Descriptor.InvoiceReferencedDocument.IssueDateTime.Value));
+                    _writeElementWithAttribute(Writer, "qdt:DateTimeString", "format", "102", _formatDate(refDoc.IssueDateTime.Value));
                     Writer.WriteEndElement(); // !ram:FormattedIssueDateTime
                 }
                 Writer.WriteEndElement(); // !ram:InvoiceReferencedDocument
             }
+            //if (this.Descriptor.InvoiceReferencedDocument != null)
+            //{
+            //    Writer.WriteStartElement("ram:InvoiceReferencedDocument");
+            //    _writeOptionalElementString(Writer, "ram:IssuerAssignedID", this.Descriptor.InvoiceReferencedDocument.ID);
+            //    if (this.Descriptor.InvoiceReferencedDocument.IssueDateTime.HasValue)
+            //    {
+            //        Writer.WriteStartElement("ram:FormattedIssueDateTime");
+            //        _writeElementWithAttribute(Writer, "qdt:DateTimeString", "format", "102", _formatDate(this.Descriptor.InvoiceReferencedDocument.IssueDateTime.Value));
+            //        Writer.WriteEndElement(); // !ram:FormattedIssueDateTime
+            //    }
+            //    Writer.WriteEndElement(); // !ram:InvoiceReferencedDocument
+            //}
             #endregion
 
             #region ReceivableSpecifiedTradeAccountingAccount
@@ -1125,7 +1138,7 @@ namespace s2industries.ZUGFeRD
                 {
                     writer.WriteElementString("ram:ID", party.ID);
                 }
-
+                
                 if ((party.GlobalID != null) && !String.IsNullOrEmpty(party.GlobalID.ID) && !String.IsNullOrEmpty(party.GlobalID.SchemeID))
                 {
                     writer.WriteStartElement("ram:GlobalID");
@@ -1139,9 +1152,26 @@ namespace s2industries.ZUGFeRD
                     writer.WriteElementString("ram:Name", party.Name);
                 }
 
+                if (!String.IsNullOrEmpty(party.Description) && partyTag == "ram:SellerTradeParty")
+                {
+                    writer.WriteElementString("ram:Description", party.Description, Profile.Comfort | Profile.Extended);
+                }
+
                 if (contact != null)
                 {
                     _writeOptionalContact(writer, "ram:DefinedTradeContact", contact, Profile.Extended | Profile.XRechnung1 | Profile.XRechnung);
+                }
+
+                // Die Definition dieses Elements löst einen validation-error aus:
+                // cvc-complex-type.2.4.a
+                if (false && !String.IsNullOrEmpty(party.EmailAddress))
+                {
+                    writer.WriteStartElement("ram:URIUniversalCommunication");
+                    writer.WriteStartElement("ram:URIID");
+                    writer.WriteAttributeString("schemeID", "EM");
+                    writer.WriteValue(party.EmailAddress);
+                    writer.WriteEndElement();
+                    writer.WriteEndElement();
                 }
 
                 writer.WriteStartElement("ram:PostalTradeAddress");

@@ -29,6 +29,11 @@ namespace s2industries.ZUGFeRD
     public enum SubjectCodes
     {
         /// <summary>
+        /// Allgemeine Informationen
+        /// </summary>
+        AAI,
+
+        /// <summary>
         /// Zusätzliche Konditionen zu diesem Kauf
         /// 
         /// Angaben zum Eigentumsvorbehalt
@@ -73,6 +78,11 @@ namespace s2industries.ZUGFeRD
         /// Remarks from or for a supplier of goods or services.
         /// </summary>
         SUR,
+
+        /// <summary>
+        /// Informationen zur Steuer
+        /// </summary>
+        TXD,
 
         /// <summary>
         /// Unknon/ invalid subject code
