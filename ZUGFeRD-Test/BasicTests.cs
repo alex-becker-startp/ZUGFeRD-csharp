@@ -46,7 +46,7 @@ namespace ZUGFeRD_Test
 
 
         [TestMethod]
-        void TestManualLineIds()
+        public void TestManualLineIds()
         {
             InvoiceDescriptor desc = this.InvoiceProvider.CreateInvoice();
             desc.TradeLineItems.Clear();
@@ -56,5 +56,51 @@ namespace ZUGFeRD_Test
             Assert.AreEqual(desc.TradeLineItems[0].AssociatedDocument.LineID, "item-01");
             Assert.AreEqual(desc.TradeLineItems[1].AssociatedDocument.LineID, "item-02");
         } // !TestManualLineIds()
+
+
+        [TestMethod]
+        public void TestCommentLine()
+        {
+            string COMMENT = System.Guid.NewGuid().ToString();
+            string CUSTOM_LINE_ID = System.Guid.NewGuid().ToString();
+
+            // test with automatic line id
+            InvoiceDescriptor desc = this.InvoiceProvider.CreateInvoice();
+            int numberOfTradeLineItems = desc.TradeLineItems.Count;
+            desc.AddTradeLineCommentItem(COMMENT);
+
+            Assert.AreEqual(numberOfTradeLineItems + 1, desc.TradeLineItems.Count);
+            Assert.IsNotNull(desc.TradeLineItems[desc.TradeLineItems.Count - 1].AssociatedDocument);
+            Assert.IsNotNull(desc.TradeLineItems[desc.TradeLineItems.Count - 1].AssociatedDocument.Notes);
+            Assert.AreEqual(desc.TradeLineItems[desc.TradeLineItems.Count - 1].AssociatedDocument.Notes.Count, 1);
+            Assert.AreEqual(desc.TradeLineItems[desc.TradeLineItems.Count - 1].AssociatedDocument.Notes[0].Content, COMMENT);
+
+
+            // test with manual line id
+            desc = this.InvoiceProvider.CreateInvoice();
+            numberOfTradeLineItems = desc.TradeLineItems.Count;
+            desc.AddTradeLineCommentItem(CUSTOM_LINE_ID, COMMENT);
+
+            Assert.AreEqual(numberOfTradeLineItems + 1, desc.TradeLineItems.Count);
+            Assert.IsNotNull(desc.TradeLineItems[desc.TradeLineItems.Count - 1].LineID, CUSTOM_LINE_ID);
+            Assert.IsNotNull(desc.TradeLineItems[desc.TradeLineItems.Count - 1].AssociatedDocument);
+            Assert.IsNotNull(desc.TradeLineItems[desc.TradeLineItems.Count - 1].AssociatedDocument.Notes);
+            Assert.AreEqual(desc.TradeLineItems[desc.TradeLineItems.Count - 1].AssociatedDocument.Notes.Count, 1);
+            Assert.AreEqual(desc.TradeLineItems[desc.TradeLineItems.Count - 1].AssociatedDocument.Notes[0].Content, COMMENT);
+        } // !TestCommentLine()
+
+
+        [TestMethod]
+        public void TestGetVersion()
+        {
+            string path = @"..\..\..\demodata\zugferd10\ZUGFeRD_1p0_COMFORT_Einfach.xml";
+            Assert.AreEqual(InvoiceDescriptor.GetVersion(path), ZUGFeRDVersion.Version1);
+
+            path = @"..\..\..\demodata\zugferd20\zugferd_2p0_BASIC_Einfach.xml";
+            Assert.AreEqual(InvoiceDescriptor.GetVersion(path), ZUGFeRDVersion.Version20);
+
+            path = @"..\..\..\demodata\zugferd21\zugferd_2p1_BASIC_Einfach-factur-x.xml";
+            Assert.AreEqual(InvoiceDescriptor.GetVersion(path), ZUGFeRDVersion.Version21);
+        } // !TestGetVersion()
     }
 }
