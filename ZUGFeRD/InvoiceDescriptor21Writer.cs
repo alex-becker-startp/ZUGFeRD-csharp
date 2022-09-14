@@ -543,7 +543,7 @@ namespace s2industries.ZUGFeRD
             {
                 foreach (AdditionalReferencedDocument document in this.Descriptor.AdditionalReferencedDocuments)
                 {
-                    Writer.WriteStartElement("ram:AdditionalReferencedDocument");
+                    Writer.WriteStartElement("ram:AdditionalReferencedDocument", Profile.Comfort | Profile.Extended);
                     Writer.WriteElementString("ram:IssuerAssignedID", document.ID);
                     Writer.WriteElementString("ram:TypeCode", document.TypeCode.EnumValueToString());
 
@@ -1282,6 +1282,20 @@ namespace s2industries.ZUGFeRD
                     return "nach dem Nullsatz zu versteuernde Waren";
                 case TaxCategoryCodes.Unknown:
                     break;
+                case TaxCategoryCodes.D:
+                    break;
+                case TaxCategoryCodes.F:
+                    break;
+                case TaxCategoryCodes.I:
+                    break;
+                case TaxCategoryCodes.J:
+                    break;
+                case TaxCategoryCodes.K:
+                    return "Kein Ausweis der Umsatzsteuer bei innergemeinschaftlichen Lieferungen";
+                case TaxCategoryCodes.L:
+                    return "IGIC (Kanarische Inseln)";
+                case TaxCategoryCodes.M:
+                    return "IPSI (Ceuta/Melilla)";
             }
 
             return null;

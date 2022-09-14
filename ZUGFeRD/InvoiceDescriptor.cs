@@ -575,13 +575,13 @@ namespace s2industries.ZUGFeRD
         /// Add an additional reference document
         /// </summary>
         /// <param name="id">Document number such as delivery note no or credit memo no</param>
-        /// <param name="issueDateTime">Document Date</param>
         /// <param name="typeCode"></param>
+        /// <param name="issueDateTime">Document Date</param>        
         /// <param name="name"></param>
         /// <param name="referenceTypeCode">Type of the referenced document</param>
         /// <param name="attachmentBinaryObject"></param>
         /// <param name="filename"></param>
-        public void AddAdditionalReferencedDocument(string id, DateTime? issueDateTime = null, AdditionalReferencedDocumentTypeCode typeCode = AdditionalReferencedDocumentTypeCode.Unknown, string name = null, ReferenceTypeCodes referenceTypeCode = ReferenceTypeCodes.Unknown, byte[] attachmentBinaryObject = null, string filename = null)
+        public void AddAdditionalReferencedDocument(string id, AdditionalReferencedDocumentTypeCode typeCode, DateTime? issueDateTime = null, string name = null, ReferenceTypeCodes referenceTypeCode = ReferenceTypeCodes.Unknown, byte[] attachmentBinaryObject = null, string filename = null)
         {
             this.AdditionalReferencedDocuments.Add(new AdditionalReferencedDocument()
             {
@@ -932,7 +932,9 @@ namespace s2industries.ZUGFeRD
                              comment: comment,
                              id: id,
                              sellerAssignedID: sellerAssignedID,
+                             buyerAssignedID: buyerAssignedID,
                              deliveryNoteID: deliveryNoteID,
+                             deliveryNoteDate: deliveryNoteDate,
                              buyerOrderID: buyerOrderID,
                              buyerOrderDate: buyerOrderDate,
                              billingPeriodStart: billingPeriodStart,
